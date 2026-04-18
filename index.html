@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shubha A — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #1e1e2e;
+    --accent: #c8a96e;
+    --accent2: #7c6df5;
+    --text: #e8e8f0;
+    --muted: #7a7a90;
+    --tag-bg: #1a1a28;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(124,109,245,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(200,169,110,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-name span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    font-size: 1rem;
+    color: #a0a0b8;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0f;
+    font-weight: 500;
+  }
+
+  .btn-primary:hover {
+    background: #d9bb82;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .hero-stats {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    opacity: 0;
+    animation: fadeLeft 0.8s 1.2s forwards;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Sections */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-card {
+    background: var(--card);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .skill-card:hover { background: #1a1a28; }
+
+  .skill-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .skill-category {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Projects */
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .project-card {
+    background: var(--card);
+    padding: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover { background: #15151e; }
+  .project-card:hover::before { transform: scaleY(1); }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+    color: #8a8aa8;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(200,169,110,0.3);
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    align-self: start;
+  }
+
+  .project-link:hover {
+    background: rgba(200,169,110,0.1);
+    border-color: var(--accent);
+  }
+
+  /* Experience */
+  .exp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .exp-list::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .exp-item {
+    padding: 2.5rem 0 2.5rem 3rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 2.8rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.4rem;
+  }
+
+  .exp-role {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .exp-company {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .exp-bullets li {
+    font-size: 0.9rem;
+    color: #8a8aa8;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .exp-bullets li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.7rem;
+  }
+
+  /* Education */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .edu-card {
+    background: var(--card);
+    padding: 2.5rem;
+  }
+
+  .edu-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .edu-degree {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .edu-school {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Certifications */
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .cert-card {
+    background: var(--card);
+    padding: 1.8rem;
+    transition: background 0.2s;
+  }
+
+  .cert-card:hover { background: #1a1a28; }
+
+  .cert-org {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .cert-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Contact */
+  .contact-section {
+    padding: 6rem 3rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translate(20px, -50%); }
+    to { opacity: 1; transform: translate(0, -50%); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .hero-stats { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .project-card { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">S.A.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero" id="about">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">// Full Stack & ML Developer</p>
+    <h1 class="hero-name">Shubha <span>A.</span></h1>
+    <p class="hero-title">MCA Graduate &nbsp;·&nbsp; Bengaluru, India</p>
+    <p class="hero-desc">
+      Results-driven developer with expertise in Python, React.js, and cloud technologies. 
+      Passionate about building AI-powered applications, automating workflows, and delivering 
+      scalable, production-ready solutions.
+    </p>
+    <div class="hero-cta">
+      <a href="https://linkedin.com/in/shubha-a-918a341ba" target="_blank" class="btn btn-primary">LinkedIn ↗</a>
+      <a href="https://github.com/shubha123A" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      <a href="#resume" class="btn btn-ghost">Resume ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">1+</div>
+        <div class="stat-label">Internship</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="reveal">
+    <p class="section-label">// 02 — Capabilities</p>
+    <h2 class="section-title">Technical <em>Skills</em></h2>
+  </div>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-icon">⚛</div>
+      <div class="skill-category">Frontend</div>
+      <div class="skill-tags">
+        <span class="tag">React.js</span>
+        <span class="tag">HTML5</span>
+        <span class="tag">CSS3</span>
+        <span class="tag">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-category">Backend</div>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">Flask</span>
+        <span class="tag">Django</span>
+        <span class="tag">Spring Boot</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🗄</div>
+      <div class="skill-category">Databases</div>
+      <div class="skill-tags">
+        <span class="tag">MySQL</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">MongoDB</span>
+        <!-- <span class="tag">MariaDB</span> -->
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">☁</div>
+      <div class="skill-category">Cloud & DevOps</div>
+      <div class="skill-tags">
+        <span class="tag">AWS EC2/S3</span>
+        <span class="tag">Lambda</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Jenkins</span>
+        <span class="tag">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🧠</div>
+      <div class="skill-category">AI & ML</div>
+      <div class="skill-tags">
+        <span class="tag">CNN</span>
+        <span class="tag">NLP</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">TensorFlow</span>
+        <span class="tag">pandas</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-category">Tools</div>
+      <div class="skill-tags">
+        <span class="tag">Git/GitHub</span>
+        <span class="tag">Terraform</span>
+        <span class="tag">Linux</span>
+        <span class="tag">REST APIs</span>
+        <span class="tag">JWT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">// 03 — Work</p>
+    <h2 class="section-title">Featured <em>Projects</em></h2>
+  </div>
+  <div class="projects-list reveal">
+
+    <div class="project-card">
+      <div>
+        <div class="project-num">01</div>
+        <div class="project-name">Sophia — AI Desktop Assistant</div>
+        <div class="project-desc">An intelligent AI-powered desktop assistant built with Python, NLP, and speech recognition. Automates tasks, answers voice queries, and integrates APIs for real-world utility.</div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Speech Recognition</span><span class="tag">API Integration</span>
+        </div>
+      </div>
+      <a href="https://github.com/shubha123A/Sophia-AI-Assistant-master" target="_blank" class="project-link">View on GitHub ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="project-num">02</div>
+        <div class="project-name">Lung Cancer Detection System</div>
+        <div class="project-desc">CNN-based deep learning model that classifies CT scan images for early-stage lung cancer detection. Includes data preprocessing, image augmentation, and model evaluation pipeline.</div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">CNN</span><span class="tag">TensorFlow</span><span class="tag">OpenCV</span><span class="tag">ML</span>
+        </div>
+      </div>
+      <a href="https://github.com/shubha123A/Lung-Cancer-Detection-Using-ML" target="_blank" class="project-link">View on GitHub ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="project-num">03</div>
+        <div class="project-name">E-Commerce Shopping Website</div>
+        <div class="project-desc">Full-stack MERN e-commerce platform with product catalog, shopping cart, JWT authentication, and RESTful APIs. Fully responsive with MongoDB backend.</div>
+        <div class="project-stack">
+          <span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">JWT</span><span class="tag">REST API</span>
+        </div>
+      </div>
+      <a href="https://github.com/shubha123A/E-Commerce-Shopping-Website" target="_blank" class="project-link">View on GitHub ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="project-num">04</div>
+        <div class="project-name">Online Car Rental System</div>
+        <div class="project-desc">Web-based car rental application with vehicle listing, booking management, user authentication, and MySQL data management. Deployed on Apache Server.</div>
+        <div class="project-stack">
+          <span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Apache</span>
+        </div>
+      </div>
+      <a href="https://github.com/shubha123A/Online-Car-Rental-System" target="_blank" class="project-link">View on GitHub ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="reveal">
+    <p class="section-label">// 04 — Experience</p>
+    <h2 class="section-title">Work <em>Experience</em></h2>
+  </div>
+  <div class="exp-list reveal">
+    <div class="exp-item">
+      <div class="exp-date">AUG 2025 — NOV 2025</div>
+      <div class="exp-role">Python Developer Intern</div>
+      <div class="exp-company">Parvam Software Solutions · Chikkabanavara, Bengaluru</div>
+      <ul class="exp-bullets">
+        <li>Developed an AI-powered desktop assistant using Python, NLP, and speech recognition.</li>
+        <li>Built REST API and database integrations to automate business workflows.</li>
+        <li>Collaborated using Git/GitHub in an Agile team environment.</li>
+      </ul>
+    </div>
+
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Education -->
+<section id="education">
+  <div class="reveal">
+    <p class="section-label">// 05 — Education</p>
+    <h2 class="section-title">Academic <em>Background</em></h2>
+  </div>
+  <div class="edu-grid reveal">
+    <div class="edu-card">
+      <div class="edu-year">2023 — 2025</div>
+      <div class="edu-degree">Master of Computer Applications (MCA)</div>
+      <div class="edu-school">Bangalore University<br>Dhanwantari Academy of Management Studies, Bengaluru</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-year">2020 — 2023</div>
+      <div class="edu-degree">Bachelor of Computer Applications (BCA)</div>
+      <div class="edu-school">Davangere University<br>Bits Hi-Tech College, Chitradurga</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Certifications -->
+<section id="certifications">
+  <div class="reveal">
+    <p class="section-label">// 06 — Credentials</p>
+    <h2 class="section-title">Certifi<em>cations</em></h2>
+  </div>
+  <div class="cert-grid reveal">
+    <div class="cert-card">
+      <div class="cert-org">Amazon Web Services</div>
+      <div class="cert-name">AWS Cloud Quest: Cloud Practitioner & Generative AI</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-org">Oracle University</div>
+      <div class="cert-name">Oracle Cloud Infrastructure DevOps Professional</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-org">Seminarroom Education</div>
+      <div class="cert-name">Full Stack Web Development (React & Node.js)</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-org">Udemy</div>
+      <div class="cert-name">Introduction to Python</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Contact -->
+<div class="divider"></div>
+
+<!-- Resume -->
+<section id="resume">
+  <div class="reveal">
+    <p class="section-label">// 07 — Resume</p>
+    <h2 class="section-title">My <em>Resume</em></h2>
+  </div>
+  <div class="reveal" style="background:var(--card); border:1px solid var(--border); padding:3rem; max-width:700px;">
+    <!-- Header -->
+    <div style="text-align:center; border-bottom:1px solid var(--border); padding-bottom:1.5rem; margin-bottom:1.5rem;">
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--text);">SHUBHA A</div>
+      <div style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; margin-top:0.5rem;">
+        +91 7411679551 &nbsp;|&nbsp; sshubha198@gmail.com &nbsp;|&nbsp; Bengaluru, India &nbsp;|&nbsp;
+        <a href="https://linkedin.com/in/shubha-a-918a341ba" target="_blank" style="color:var(--accent); text-decoration:none;">LinkedIn</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/shubha123A" target="_blank" style="color:var(--accent); text-decoration:none;">GitHub</a>
+      </div>
+    </div>
+    <!-- Summary -->
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Professional Summary</div>
+      <p style="font-size:0.85rem; color:#8a8aa8; line-height:1.7;">Results-driven MCA graduate and Full Stack Developer with expertise in Python, React.js, and cloud technologies. Experienced in building AI-powered applications, automating CI/CD pipelines, and delivering scalable solutions using the MERN stack and DevOps best practices.</p>
+    </div>
+    <!-- Education -->
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Education</div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;"><span style="font-weight:500; font-size:0.85rem;">Master of Computer Applications (MCA)</span><span style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted);">2023–2025</span></div>
+      <div style="font-size:0.78rem; color:var(--muted); margin-bottom:0.8rem;">Bangalore University | Dhanwantari Academy of Management Studies</div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;"><span style="font-weight:500; font-size:0.85rem;">Bachelor of Computer Applications (BCA)</span><span style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted);">2020–2023</span></div>
+      <div style="font-size:0.78rem; color:var(--muted);">Davangere University | Bits Hi-Tech College, Chitradurga</div>
+    </div>
+    <!-- Skills -->
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Skills</div>
+      <div style="font-size:0.82rem; line-height:1.9; color:#8a8aa8;">
+        <span style="color:var(--text); font-weight:500;">Frontend:</span> React.js, HTML5, CSS3, JavaScript &nbsp;&nbsp;
+        <span style="color:var(--text); font-weight:500;">Backend:</span> Python, Java, Flask, Django, Spring Boot<br>
+        <span style="color:var(--text); font-weight:500;">Databases:</span> MySQL, PostgreSQL, MongoDB &nbsp;&nbsp;
+        <span style="color:var(--text); font-weight:500;">Cloud:</span> AWS (EC2, S3, Lambda, RDS), Docker, Kubernetes<br>
+        <span style="color:var(--text); font-weight:500;">Tools:</span> Git, GitHub, Jenkins, Terraform, Linux, REST APIs
+      </div>
+    </div>
+    <!-- Experience -->
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Work Experience</div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;"><span style="font-weight:500; font-size:0.85rem;">Python Developer Intern | Parvam Software Solutions</span><span style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted);">Aug–Nov 2025</span></div>
+      <div style="font-size:0.78rem; color:var(--muted); margin-bottom:0.3rem; font-style:italic;">Chikkabanavara, Bengaluru</div>
+      <ul style="font-size:0.82rem; color:#8a8aa8; padding-left:1.2rem; line-height:1.8;">
+        <li>Developed an AI-powered desktop assistant using Python, NLP, and speech recognition.</li>
+        <li>Built REST API and database integrations to automate business workflows using Git/GitHub in an Agile team.</li>
+      </ul>
+    </div>
+    <!-- Projects -->
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Projects</div>
+      <div style="display:flex; flex-direction:column; gap:0.8rem;">
+        <div><span style="font-weight:500; font-size:0.85rem;">Sophia AI Desktop Assistant</span> <span style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted);">Python · NLP · Speech Recognition</span><br><span style="font-size:0.78rem; color:#8a8aa8;">AI-powered assistant with voice commands, API integration, and task automation.</span></div>
+        <div><span style="font-weight:500; font-size:0.85rem;">Lung Cancer Detection System</span> <span style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted);">Python · CNN · ML</span><br><span style="font-size:0.78rem; color:#8a8aa8;">CNN-based model to classify CT scan images for early cancer detection.</span></div>
+        <div><span style="font-weight:500; font-size:0.85rem;">E-Commerce Shopping Website</span> <span style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted);">MERN Stack</span><br><span style="font-size:0.78rem; color:#8a8aa8;">Full-stack platform with JWT auth, REST APIs, product catalog, and shopping cart.</span></div>
+      </div>
+    </div>
+    <!-- Certifications -->
+    <div>
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.8rem;">Certifications</div>
+      <ul style="font-size:0.82rem; color:#8a8aa8; padding-left:1.2rem; line-height:1.9;">
+        <li>AWS Cloud Quest: Cloud Practitioner & Generative AI — Amazon Web Services (Sep 2025)</li>
+        <li>Oracle Cloud Infrastructure DevOps Professional — Oracle University (Oct 2025)</li>
+        <li>Full Stack Web Development (React & Node.js) — Seminarroom Education</li>
+        <li>Introduction to Python — Udemy</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="contact-section" id="contact">
+  <div class="contact-inner reveal">
+    <p class="section-label" style="text-align:center">// 08 — Say Hello</p>
+    <h2 class="section-title" style="margin-bottom:1rem">Let's <em>Connect</em></h2>
+    <p style="color:var(--muted); font-size:0.95rem;">Open to full-time roles, internships, and collaborations.<br>Feel free to reach out!</p>
+    <div class="contact-links">
+      <a href="mailto:sshubha198@gmail.com" class="contact-link">✉ sshubha198@gmail.com</a>
+      <a href="https://linkedin.com/in/shubha-a-918a341ba" target="_blank" class="contact-link">LinkedIn ↗</a>
+      <a href="https://github.com/shubha123A" target="_blank" class="contact-link">GitHub ↗</a>
+      <a href="tel:+917411679551" class="contact-link">📞 +91 7411679551</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Shubha A — All rights reserved</span>
+  <span>Built with ♥ in Bengaluru</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section, div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
